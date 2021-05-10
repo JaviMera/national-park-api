@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NationalParkApi.Data;
+using NationalParkApi.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace NationalParkApi
         {
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<INationalParkRepository, NationalParkRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
