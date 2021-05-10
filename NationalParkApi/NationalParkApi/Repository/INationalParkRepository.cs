@@ -12,5 +12,6 @@ namespace NationalParkApi.Repository
         bool CreateNationalPark(NationalPark nationalPark);
         bool UpdateNationalPark(NationalPark nationalPark);
         bool DeleteNationalPark(NationalPark nationalPark);
+        bool Save();
     }
 }
