@@ -42,5 +42,34 @@ namespace NationalParkApi.Controllers
 
             return Ok(_mapper.Map<NationalParkDto>(nationalPark));
         }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] NationalParkDto nationalParkDto)
+        {
+            if(nationalParkDto == null)
+            {
+                return BadRequest(nationalParkDto);
+            }
+
+            if (_nationalParkRepository.Exists(nationalParkDto.Name))
+            {
+                ModelState.AddModelError("", "National Park Exists!");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var nationalPark = _mapper.Map<NationalPark>(nationalParkDto);
+            if (!_nationalParkRepository.CreateNationalPark(nationalPark))
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record {nationalPark.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
     }
 }
