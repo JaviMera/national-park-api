@@ -33,14 +33,16 @@ namespace NationalParkApi
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddAutoMapper(typeof(NationalParkMappings));
+            services.AddScoped<NationalParkDbSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, NationalParkDbSeeder nationalParkDbSeeder)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                nationalParkDbSeeder.Seed();
             }
 
             app.UseHttpsRedirection();

@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using NationalParkApi.Repository;
 
 namespace NationalParkApi.Controllers
 {
@@ -11,5 +8,13 @@ namespace NationalParkApi.Controllers
     [ApiController]
     public class NationalParkController : ControllerBase
     {
+        private readonly INationalParkRepository _nationalParkRepository;
+        private readonly IMapper _mapper;
+
+        public NationalParkController(INationalParkRepository nationalParkRepository, IMapper mapper)
+        {
+            _nationalParkRepository = nationalParkRepository;
+            _mapper = mapper;
+        }
     }
 }
