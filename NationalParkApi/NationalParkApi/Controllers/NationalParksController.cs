@@ -30,8 +30,8 @@ namespace NationalParkApi.Controllers
             return Ok(parksDto);
         }
 
-        [HttpGet("{parkId}")]
-        public IActionResult Get(int parkId)
+        [HttpGet("{parkId}", Name = "GetNationalPark")]
+        public IActionResult GetNationalPark(int parkId)
         {
             var nationalPark = _nationalParkRepository.GetNationalPark(parkId);
 
@@ -69,7 +69,7 @@ namespace NationalParkApi.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok();
+            return CreatedAtRoute("GetNationalPark", new { parkId = nationalPark.Id }, nationalPark);
         }
     }
 }
