@@ -35,7 +35,7 @@ namespace NationalParkApi.Controllers
         {
             var nationalPark = _nationalParkRepository.GetNationalPark(parkId);
 
-            if(nationalPark == null)
+            if (nationalPark == null)
             {
                 return NotFound();
             }
@@ -46,7 +46,7 @@ namespace NationalParkApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] NationalParkDto nationalParkDto)
         {
-            if(nationalParkDto == null)
+            if (nationalParkDto == null)
             {
                 return BadRequest(nationalParkDto);
             }
@@ -70,6 +70,31 @@ namespace NationalParkApi.Controllers
             }
 
             return CreatedAtRoute("GetNationalPark", new { parkId = nationalPark.Id }, nationalPark);
+        }
+
+        [HttpPatch("{parkId}", Name = "GetNationalPark")]
+        public IActionResult Update(int parkId, [FromBody] NationalParkDto nationalParkDto)
+        {
+            if (nationalParkDto == null || parkId != nationalParkDto.Id)
+            {
+                return BadRequest(nationalParkDto);
+            }
+
+            if (_nationalParkRepository.Exists(nationalParkDto.Name))
+            {
+                ModelState.AddModelError("", "National Park Exists!");
+                return StatusCode(404, ModelState);
+            }
+
+            var nationalPark = _mapper.Map<NationalPark>(nationalParkDto);
+
+            if (!_nationalParkRepository.UpdateNationalPark(nationalPark))
+            {
+                ModelState.AddModelError("", $"Something went wrong when updating the record {nationalPark.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
         }
     }
 }
